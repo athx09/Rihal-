@@ -67,10 +67,11 @@ $id = $_SESSION['admin_id'];
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
+                    
                     <a href="users.php" class="nav-item nav-link">Users</a>
-                    <a href="destination.php" class="nav-item nav-link">Places & Destinations</a>
+                    <a href="destination.php" class="nav-item nav-link active">Places & Destinations</a>
                     <a href="departments.php" class="nav-item nav-link">Departments</a>
-                    <a href="events.php" class="nav-item nav-link active">Events</a>
+                    <a href="events.php" class="nav-item nav-link">Events</a>
                     <a href="plans.php" class="nav-item nav-link">Users Plans</a>
                     <a href="comments.php" class="nav-item nav-link">Comments</a>
                     <a href="chat.php" class="nav-item nav-link">Technical Support</a>
@@ -83,12 +84,12 @@ $id = $_SESSION['admin_id'];
             <div class="container py-5">
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-                        <h1 class="display-3 text-white animated slideInDown">Events</h1>
+                        <h1 class="display-3 text-white animated slideInDown">Places & Destinations</h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb justify-content-center">
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Home</a></li>
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Pages</a></li>
-                                <li class="breadcrumb-item text-white active" aria-current="page">Events</li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Places & Destinations</li>
                             </ol>
                         </nav>
                     </div>
@@ -105,12 +106,12 @@ $id = $_SESSION['admin_id'];
             <div class="row">
                 <div class="col-lg-10">
                     <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <h6 class="section-title bg-white text-center  px-3">Events</h6>
+                        <h6 class="section-title bg-white text-center  px-3">Places & Destinations</h6>
 
                     </div>
                 </div>
                 <div class="col-lg-2" style="margin-bottom: 10px">
-                    <a href="add_event.php" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-plus"></i> Add</a>
+                    <a href="add_destination.php" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-plus"></i> Add</a>
                 </div>
             </div>
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -119,9 +120,11 @@ $id = $_SESSION['admin_id'];
                     <th>Photo</th>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Destination Or Place</th>
-                    <th>Type</th>
-                    <th>Department</th>
+                    <th>From Price</th>
+                    <th>To Price</th>
+                    <th>Availability</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
                     <th>Control</th>
                 </tr>
             </thead>
@@ -129,27 +132,45 @@ $id = $_SESSION['admin_id'];
                 <?php
                       
                 include('../connect.php');  
-                $sql = $con->prepare("SELECT events.* , places.name , department.name as department_name FROM events INNER JOIN places ON places.place_id=events.place_id INNER JOIN department ON department.department_id=events.department_id");      
+                
+                 $place_id = isset($_GET['place_id']) && is_numeric($_GET['place_id']) ? intval($_GET['place_id']) : 0;
+
+                $stmt = $con->prepare("DELETE FROM places WHERE place_id = :place_id");
+
+                $stmt->bindParam(":place_id" , $place_id);
+
+                $stmt->execute();
+
+                echo '<div class="container" dir="ltr" style="margin-top:30px;color:#FFF;margin-bottom:30px;font-family:cairo">
+                  <div class="alert alert-info role="alert" style="color:#FFF;text-align:center;margin-bottom:40px;font-family:cairo">
+                      Place Deleted Successfully
+                 </div>
+             </div>'; 
+                
+                $sql = $con->prepare("SELECT * FROM places");      
                 $sql->execute();
                 $rows = $sql->fetchAll();
 
                 foreach($rows as $pat)
                 {
 
-              ?>
+              ?>  
                 <tr>
                     <td><img src="data:image;base64,<?php echo $pat['image']; ?>" style="width: 40px;height: 40px"></td>
-                    <td><?php echo $pat['title']; ?></td>
-                    <td><?php echo $pat['event']; ?></td>
                     <td><?php echo $pat['name']; ?></td>
-                    <td><?php echo $pat['event_type']; ?></td>
-                    <td><?php echo $pat['department_name']; ?></td>
+                    <td><?php echo $pat['description']; ?></td>
+                    <td><?php echo $pat['from_price']; ?> SR</td>
+                    <td><?php echo $pat['to_price']; ?> SR</td>
+                    <td><?php echo $pat['availability']; ?></td>
+                    <td><?php echo $pat['from_date']; ?></td>
+                    <td><?php echo $pat['to_date']; ?></td>
                     <td>
-                        <a href="edit_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-pencil"></i></a>
-                        <a onclick="return confirm('Are you sure to Delete this Event ?');" href="delete_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-trash"></i> </a>
+                        <a href="edit_destination.php?place_id=<?php echo $pat['place_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-pencil"></i></a>
+                        <a onclick="return confirm('Are you sure to Delete this Destination ?');" href="delete_place.php?place_id=<?php echo $pat['place_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-trash"></i> </a>
                     </td>
                 </tr>
-                <?php } ?>
+                <?php  } ?>
+               
             </tbody>    
           </table>
             

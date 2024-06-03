@@ -40,7 +40,9 @@ $id = $_SESSION['admin_id'];
 
     <!-- Template Stylesheet -->
     <link href="../css/style.css" rel="stylesheet">
+    
 </head>
+    
 
 <body>
     <!-- Spinner Start -->
@@ -67,13 +69,14 @@ $id = $_SESSION['admin_id'];
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
+                    
                     <a href="users.php" class="nav-item nav-link">Users</a>
                     <a href="destination.php" class="nav-item nav-link">Places & Destinations</a>
                     <a href="departments.php" class="nav-item nav-link">Departments</a>
-                    <a href="events.php" class="nav-item nav-link active">Events</a>
+                    <a href="events.php" class="nav-item nav-link">Events</a>
                     <a href="plans.php" class="nav-item nav-link">Users Plans</a>
                     <a href="comments.php" class="nav-item nav-link">Comments</a>
-                    <a href="chat.php" class="nav-item nav-link">Technical Support</a>
+                    <a href="chat.php" class="nav-item nav-link active">Technical Support</a>
                 </div>
                 <a href="../logout.php" style="background-color: #7F4E25 !important;border: 1px solid #7F4E25" class="btn btn-primary rounded-pill py-2 px-4"><i class="fa fa-key"></i> Sign Out</a>
             </div>
@@ -83,12 +86,12 @@ $id = $_SESSION['admin_id'];
             <div class="container py-5">
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-                        <h1 class="display-3 text-white animated slideInDown">Events</h1>
+                        <h1 class="display-3 text-white animated slideInDown">Technical Support Chatting</h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb justify-content-center">
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Home</a></li>
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Pages</a></li>
-                                <li class="breadcrumb-item text-white active" aria-current="page">Events</li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Technical Support Chatting</li>
                             </ol>
                         </nav>
                     </div>
@@ -100,53 +103,38 @@ $id = $_SESSION['admin_id'];
 
     
     <!-- Package Start -->
-    <div class="container-xxl py-5">
+   <div class="container-xxl py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-10">
-                    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <h6 class="section-title bg-white text-center  px-3">Events</h6>
-
-                    </div>
-                </div>
-                <div class="col-lg-2" style="margin-bottom: 10px">
-                    <a href="add_event.php" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-plus"></i> Add</a>
-                </div>
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center  px-3">Users</h6>
+                
             </div>
+            
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Photo</th>
                     <th>Name</th>
-                    <th>Description</th>
-                    <th>Destination Or Place</th>
-                    <th>Type</th>
-                    <th>Department</th>
+                    <th>Email</th>
                     <th>Control</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                       
-                include('../connect.php');  
-                $sql = $con->prepare("SELECT events.* , places.name , department.name as department_name FROM events INNER JOIN places ON places.place_id=events.place_id INNER JOIN department ON department.department_id=events.department_id");      
-                $sql->execute();
-                $rows = $sql->fetchAll();
+                    include('../connect.php');  
+                    $sql = $con->prepare("SELECT * FROM customer");      
+                    $sql->execute();
+                    $rows = $sql->fetchAll();
 
-                foreach($rows as $pat)
-                {
+                    foreach($rows as $pat)
+                    {
 
-              ?>
+                  ?> 
                 <tr>
-                    <td><img src="data:image;base64,<?php echo $pat['image']; ?>" style="width: 40px;height: 40px"></td>
-                    <td><?php echo $pat['title']; ?></td>
-                    <td><?php echo $pat['event']; ?></td>
                     <td><?php echo $pat['name']; ?></td>
-                    <td><?php echo $pat['event_type']; ?></td>
-                    <td><?php echo $pat['department_name']; ?></td>
+                    <td><?php echo $pat['email']; ?></td>
                     <td>
-                        <a href="edit_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-pencil"></i></a>
-                        <a onclick="return confirm('Are you sure to Delete this Event ?');" href="delete_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-trash"></i> </a>
+                        <a href="chat_details.php?customer_id=<?php echo $pat['customer_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-chat-dots"></i> Start Chatting</a>
                     </td>
                 </tr>
                 <?php } ?>

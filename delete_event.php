@@ -129,6 +129,21 @@ $id = $_SESSION['admin_id'];
                 <?php
                       
                 include('../connect.php');  
+                
+                 $event_id = isset($_GET['event_id']) && is_numeric($_GET['event_id']) ? intval($_GET['event_id']) : 0;
+
+                    $stmt = $con->prepare("DELETE FROM events WHERE event_id = :event_id");
+
+                    $stmt->bindParam(":event_id" , $event_id);
+
+                    $stmt->execute();
+
+                    echo '<div class="container" dir="ltr" style="margin-top:30px;color:#FFF;margin-bottom:30px;font-family:cairo">
+                      <div class="alert alert-info role="alert" style="color:#FFF;text-align:center;margin-bottom:40px;font-family:cairo">
+                          Event Deleted Successfully
+                     </div>
+                 </div>'; 
+                
                 $sql = $con->prepare("SELECT events.* , places.name , department.name as department_name FROM events INNER JOIN places ON places.place_id=events.place_id INNER JOIN department ON department.department_id=events.department_id");      
                 $sql->execute();
                 $rows = $sql->fetchAll();

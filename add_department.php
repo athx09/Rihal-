@@ -67,10 +67,11 @@ $id = $_SESSION['admin_id'];
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
+                    
                     <a href="users.php" class="nav-item nav-link">Users</a>
                     <a href="destination.php" class="nav-item nav-link">Places & Destinations</a>
-                    <a href="departments.php" class="nav-item nav-link">Departments</a>
-                    <a href="events.php" class="nav-item nav-link active">Events</a>
+                    <a href="departments.php" class="nav-item nav-link active">Departments</a>
+                    <a href="events.php" class="nav-item nav-link">Events</a>
                     <a href="plans.php" class="nav-item nav-link">Users Plans</a>
                     <a href="comments.php" class="nav-item nav-link">Comments</a>
                     <a href="chat.php" class="nav-item nav-link">Technical Support</a>
@@ -83,12 +84,12 @@ $id = $_SESSION['admin_id'];
             <div class="container py-5">
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-                        <h1 class="display-3 text-white animated slideInDown">Events</h1>
+                        <h1 class="display-3 text-white animated slideInDown">Events Departments</h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb justify-content-center">
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Home</a></li>
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Pages</a></li>
-                                <li class="breadcrumb-item text-white active" aria-current="page">Events</li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Events Departments</li>
                             </ol>
                         </nav>
                     </div>
@@ -103,55 +104,94 @@ $id = $_SESSION['admin_id'];
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-12">
                     <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <h6 class="section-title bg-white text-center  px-3">Events</h6>
+                        <h6 class="section-title bg-white text-center  px-3">Add Department</h6>
 
                     </div>
                 </div>
-                <div class="col-lg-2" style="margin-bottom: 10px">
-                    <a href="add_event.php" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-plus"></i> Add</a>
+                
+            </div>
+            <?php
+                  
+          if(isset($_POST['add'])){
+
+            $name = $_POST['name'];
+            
+            include('../connect.php');  
+            $sqlPL = $con->prepare("SELECT * FROM department WHERE name='$name'");      
+            $sqlPL->execute();
+            $rowsPL = $sqlPL->fetchAll();
+            $countPL=$sqlPL->rowCount();
+            if($countPL > 0){ 
+
+                foreach($rowsPL as $pat){
+
+                    if($pat['name'] == $name){
+
+
+                        echo '
+                         <div class="container" dir="ltr" style="margin-top:80px;color:#000">
+                              <div class="alert alert-success role="alert" style="color:#000">
+                                  This Department Is Found Before
+                             </div>
+                         </div>';
+
+
+
+                    }
+
+
+                }
+
+
+            }else{
+
+                $sql = "INSERT INTO department (name) VALUES ('$name')";
+
+                 $con->exec($sql);
+
+                echo '
+                 <div class="container" dir="ltr" style="margin-top:80px;color:#000">
+                      <div class="alert alert-success role="alert" style="color:#000">
+                          Department Added Successfully
+                     </div>
+                 </div>';
+
+
+            }
+
+          }
+
+
+        ?> 
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    
+                </div>
+                
+                <div class="col-lg-6 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                    <form method="post">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="text" name="name" required class="form-control" id="name" placeholder="Name">
+                                    <label for="name">Name</label>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-12">
+                                <button name="add" class="btn btn-primary w-100 py-3" style="background-color: #7F4E25 !important;border: 1px solid #7F4E25" type="submit">Add</button>
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    
                 </div>
             </div>
-            <table id="bootstrap-data-table" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Photo</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Destination Or Place</th>
-                    <th>Type</th>
-                    <th>Department</th>
-                    <th>Control</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                      
-                include('../connect.php');  
-                $sql = $con->prepare("SELECT events.* , places.name , department.name as department_name FROM events INNER JOIN places ON places.place_id=events.place_id INNER JOIN department ON department.department_id=events.department_id");      
-                $sql->execute();
-                $rows = $sql->fetchAll();
-
-                foreach($rows as $pat)
-                {
-
-              ?>
-                <tr>
-                    <td><img src="data:image;base64,<?php echo $pat['image']; ?>" style="width: 40px;height: 40px"></td>
-                    <td><?php echo $pat['title']; ?></td>
-                    <td><?php echo $pat['event']; ?></td>
-                    <td><?php echo $pat['name']; ?></td>
-                    <td><?php echo $pat['event_type']; ?></td>
-                    <td><?php echo $pat['department_name']; ?></td>
-                    <td>
-                        <a href="edit_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-pencil"></i></a>
-                        <a onclick="return confirm('Are you sure to Delete this Event ?');" href="delete_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-trash"></i> </a>
-                    </td>
-                </tr>
-                <?php } ?>
-            </tbody>    
-          </table>
             
         </div>
     </div>

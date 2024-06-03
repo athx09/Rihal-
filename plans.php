@@ -70,8 +70,8 @@ $id = $_SESSION['admin_id'];
                     <a href="users.php" class="nav-item nav-link">Users</a>
                     <a href="destination.php" class="nav-item nav-link">Places & Destinations</a>
                     <a href="departments.php" class="nav-item nav-link">Departments</a>
-                    <a href="events.php" class="nav-item nav-link active">Events</a>
-                    <a href="plans.php" class="nav-item nav-link">Users Plans</a>
+                    <a href="events.php" class="nav-item nav-link">Events</a>
+                    <a href="plans.php" class="nav-item nav-link active">Users Plans</a>
                     <a href="comments.php" class="nav-item nav-link">Comments</a>
                     <a href="chat.php" class="nav-item nav-link">Technical Support</a>
                 </div>
@@ -83,12 +83,12 @@ $id = $_SESSION['admin_id'];
             <div class="container py-5">
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-                        <h1 class="display-3 text-white animated slideInDown">Events</h1>
+                        <h1 class="display-3 text-white animated slideInDown">Users Plans</h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb justify-content-center">
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Home</a></li>
                                 <li class="breadcrumb-item"><a href="#" style="color: #7F4E25">Pages</a></li>
-                                <li class="breadcrumb-item text-white active" aria-current="page">Events</li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Users Plans</li>
                             </ol>
                         </nav>
                     </div>
@@ -103,25 +103,27 @@ $id = $_SESSION['admin_id'];
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-12">
                     <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <h6 class="section-title bg-white text-center  px-3">Events</h6>
+                        <h6 class="section-title bg-white text-center  px-3">Users Plans</h6>
 
                     </div>
                 </div>
-                <div class="col-lg-2" style="margin-bottom: 10px">
-                    <a href="add_event.php" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-plus"></i> Add</a>
-                </div>
+                
             </div>
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Photo</th>
                     <th>Name</th>
-                    <th>Description</th>
-                    <th>Destination Or Place</th>
-                    <th>Type</th>
-                    <th>Department</th>
+                    <th>Place</th>
+                    <th>Events</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Number Of Persons</th>
+                    <th>From Budget</th>
+                    <th>To Budget</th>
+                    <th>Events Types</th>
+                    <th>Notes</th>
                     <th>Control</th>
                 </tr>
             </thead>
@@ -129,7 +131,7 @@ $id = $_SESSION['admin_id'];
                 <?php
                       
                 include('../connect.php');  
-                $sql = $con->prepare("SELECT events.* , places.name , department.name as department_name FROM events INNER JOIN places ON places.place_id=events.place_id INNER JOIN department ON department.department_id=events.department_id");      
+                $sql = $con->prepare("SELECT customer_plans.* , events.title , events.event_type , places.name , customer.name as customer_name FROM customer_plans INNER JOIN places ON places.place_id=customer_plans.place_id INNER JOIN events ON events.event_id=customer_plans.event_id INNER JOIN customer ON  customer.customer_id=customer_plans.customer_id");      
                 $sql->execute();
                 $rows = $sql->fetchAll();
 
@@ -138,18 +140,28 @@ $id = $_SESSION['admin_id'];
 
               ?>
                 <tr>
-                    <td><img src="data:image;base64,<?php echo $pat['image']; ?>" style="width: 40px;height: 40px"></td>
-                    <td><?php echo $pat['title']; ?></td>
-                    <td><?php echo $pat['event']; ?></td>
+                    <td><a title="Customer Data" href="customer_info.php?customer_id=<?php echo $pat['customer_id']; ?>"><?php echo $pat['customer_name']; ?></a></td>
                     <td><?php echo $pat['name']; ?></td>
-                    <td><?php echo $pat['event_type']; ?></td>
-                    <td><?php echo $pat['department_name']; ?></td>
                     <td>
-                        <a href="edit_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-pencil"></i></a>
-                        <a onclick="return confirm('Are you sure to Delete this Event ?');" href="delete_event.php?event_id=<?php echo $pat['event_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-trash"></i> </a>
+                        <ul>
+                            <li><?php echo $pat['title']; ?></li>
+                            
+                        </ul>
+                    </td>
+                    <td><?php echo $pat['from_date']; ?></td>
+                    <td><?php echo $pat['to_date']; ?></td>
+                    <td><?php echo $pat['persons_numbers']; ?></td>
+                    <td><?php echo $pat['from_budget']; ?> SR</td>
+                    <td><?php echo $pat['to_budget']; ?> SR</td>
+                    <td><?php echo $pat['event_type']; ?></td>
+                    <td><?php echo $pat['notes']; ?></td>
+                    <td>
+                        <a title="Plan Details" href="plan_details.php?plan_id=<?php echo $pat['customer_plan_id']; ?>" class="btn btn-primary" style="background-color: #7F4E25;border: 1px solid #7F4E25;color: #FFF"><i class="bi bi-eye"></i></a>
+                       
                     </td>
                 </tr>
                 <?php } ?>
+               
             </tbody>    
           </table>
             
