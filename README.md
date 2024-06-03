@@ -2,7 +2,7 @@
 
 RIHAL is a web application designed to provide an integrated tourist plan for individuals visiting the Kingdom of Saudi Arabia. The application offers a range of features to enhance the travel experience, including budget analysis, comprehensive information on tourist attractions, and booking services.
 
- ##Technologies Used
+ ## Technologies Used
 The RIHAL project was developed using the following technologies:
 - Front-end: HTML, CSS, JavaScript
 - Back-end: php
