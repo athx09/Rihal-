@@ -16,3 +16,11 @@ To run the RIHAL application locally, follow these steps:
 3. Set up the database connection 
 4. Start the development server
 5. Access the application in web browser at `http://localhost:rihal`.
+
+## Usage
+
+Using the RIHAL application is straightforward and intuitive. Here's how you can get started:
+
+1. Landing Page: When you access the RIHAL website, you'll be greeted with the home page. This page provides a brief introduction to the application and its key features.
+
+2. Budget Analysis: To begin planning your trip, click on the "Create Plan" . This is where you can input your your preferences for the trip. The platform will then suggest suitable options that fit within your specified preferences .
