@@ -11,7 +11,7 @@ The RIHAL project was developed using the following technologies:
 - Other Tools: GitHub, Visual Studio Code
 
 ## Installation and Setup
-To run the RIHAL application locally, follow these steps:
+To run the RIHAL platform locally, follow these steps:
 1. Clone the repository: `git clone https://github.com/athx09/rihal.git`
 2. Install dependencies
 3. Set up the database connection 
