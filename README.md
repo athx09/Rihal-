@@ -1,6 +1,6 @@
 # Rihal-A Saudi Tourism Advisor 
 
- ##Overview
+## Overview
 RIHAL is a platform designed to provide an integrated tourist plan for individuals visiting the Kingdom of Saudi Arabia. The application offers a range of features to enhance the travel experience, including budget analysis, comprehensive information on tourist attractions, and booking services.
 
  ## Technologies Used
